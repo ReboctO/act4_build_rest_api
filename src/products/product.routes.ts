@@ -5,81 +5,92 @@ import { StatusCodes } from "http-status-codes";
 
 export const productRouter = express.Router();
 
-productRouter.get('/products', async (req: Request, res: Response) => {
+productRouter.get('/products', async (_req: Request, res: Response): Promise<void> => {
     try {
         const allProducts = await database.findAll();
 
-        if (!allProducts) {
-            return res.status(StatusCodes.NOT_FOUND).json({ error: 'No products found!' });
+        if (!allProducts || allProducts.length === 0) {
+            res.status(StatusCodes.NOT_FOUND).json({ error: 'No products found!' });
+            return;
         }
 
-        return res.status(StatusCodes.OK).json({ total: allProducts.length, allProducts });
+        res.status(StatusCodes.OK).json({ total: allProducts.length, allProducts });
+        return;
     } catch (error) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+        return;
     }
 });
 
-productRouter.get('/product/:id', async (req: Request, res: Response) => {
+productRouter.get('/product/:id', async (req: Request, res: Response): Promise<void> => {
     try {
         const product = await database.findOne(req.params.id);
 
         if (!product) {
-            return res.status(StatusCodes.NOT_FOUND).json({ error: 'Product does not exist' });
+            res.status(StatusCodes.NOT_FOUND).json({ error: 'Product does not exist' });
+            return;
         }
 
-        return res.status(StatusCodes.OK).json({ product });
+        res.status(StatusCodes.OK).json({ product });
+        return;
     } catch (error) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+        return;
     }
 });
 
-productRouter.post("/product", async (req: Request, res: Response) => {
+productRouter.post("/product", async (req: Request, res: Response): Promise<void> => {
     try {
         const { name, price, quantity, image } = req.body;
 
         if (!name || !price || !quantity || !image) {
-            return res.status(StatusCodes.BAD_REQUEST).json({ error: `Please provide all the required parameters..` });
+            res.status(StatusCodes.BAD_REQUEST).json({ error: `Please provide all the required parameters..` });
+            return;
         }
 
         const newProduct = await database.create({ ...req.body });
-        return res.status(StatusCodes.CREATED).json({ newProduct });
+        res.status(StatusCodes.CREATED).json({ newProduct });
+        return;
     } catch (error) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+        return;
     }
 });
 
-productRouter.put("/product/:id", async (req: Request, res: Response) => {
+productRouter.put("/product/:id", async (req: Request, res: Response): Promise<void> => {
     try {
         const id = req.params.id;
-
         const newProduct = req.body;
-
         const findProduct = await database.findOne(id);
 
         if (!findProduct) {
-            return res.status(StatusCodes.NOT_FOUND).json({ error: `Product does not exist..` });
+            res.status(StatusCodes.NOT_FOUND).json({ error: `Product does not exist..` });
+            return;
         }
 
         const updateProduct = await database.update(id, newProduct);
-
-        return res.status(StatusCodes.OK).json({ updateProduct });
+        res.status(StatusCodes.OK).json({ updateProduct });
+        return;
     } catch (error) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+        return;
     }
 });
 
-productRouter.delete("/product/:id", async (req: Request, res: Response) => {
+productRouter.delete("/product/:id", async (req: Request, res: Response): Promise<void> => {
     try {
         const getProduct = await database.findOne(req.params.id);
 
         if (!getProduct) {
-            return res.status(StatusCodes.NOT_FOUND).json({ error: `No product with ID ${req.params.id}` });
+            res.status(StatusCodes.NOT_FOUND).json({ error: `No product with ID ${req.params.id}` });
+            return;
         }
 
         await database.remove(req.params.id);
-
-        return res.status(StatusCodes.OK).json({ msg: `Product deleted..` });
+        res.status(StatusCodes.OK).json({ msg: `Product deleted..` });
+        return;
     } catch (error) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+        return;
     }
 });
