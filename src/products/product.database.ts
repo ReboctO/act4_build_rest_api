@@ -1,14 +1,22 @@
 import { Product, Products, UnitProduct } from "./product.interface";
 import { v4 as random } from "uuid";
 import fs from "fs";
+import path from "path";
+
+const filePath = path.resolve(__dirname, "products.json");
 
 let products: Products = loadProducts();
 
 function loadProducts(): Products {
     try {
-        const data = fs.readFileSync("./products.json", "utf-8");
+        if (!fs.existsSync(filePath)) {
+            console.log("users.json not found. Creating a new one...");
+            fs.writeFileSync(filePath, JSON.stringify({}, null, 2), "utf-8");
+        }
+        const data = fs.readFileSync(filePath, "utf-8");
         return JSON.parse(data);
-    } catch (error) {
+    }
+    catch (error) {
         console.log(`Error ${error}`);
         return {};
     }
@@ -16,14 +24,14 @@ function loadProducts(): Products {
 
 function saveProducts() {
     try {
-        fs.writeFileSync("./products.json", JSON.stringify(products), "utf-8");
+        fs.writeFileSync(filePath, JSON.stringify(products), "utf-8");
         console.log("Products saved successfully!");
     } catch (error) {
-        console.log("Error", error);
+        console.log("Error Saving Products", error);
     }
 }
 
-export const findAll = async (): Promise<UnitProduct[]> => Object.values(products);
+export const findAll = async (): Promise<UnitProduct[]> => Object.values(products)|| null;
 
 export const findOne = async (id: string): Promise<UnitProduct> => products[id];
 
