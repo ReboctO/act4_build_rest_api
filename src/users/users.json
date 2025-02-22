@@ -1,8 +1,14 @@
 {
-  "064b28ac-b147-4fdc-88c5-5300f908a973": {
-    "id": "064b28ac-b147-4fdc-88c5-5300f908a973",
-    "username": "erlerl",
+  "c0c2e61d-0fa5-4393-bd93-655b04ebde64": {
+    "id": "c0c2e61d-0fa5-4393-bd93-655b04ebde64",
+    "username": "erl",
     "email": "erl@gmail.com",
-    "password": "$2b$10$YoYmEN6/0as.ljCCJpm9leJkdHvG/jBe3wM/L8vRONPqNUYc35WZ2"
+    "password": "$2b$10$KfR71Wz12/WIKRd5pib5aumOdaTw4cdEi6taUsEzaxlasvofccjnW"
+  },
+  "fb196756-a019-4aa7-8ab0-50b903b0ab38": {
+    "id": "fb196756-a019-4aa7-8ab0-50b903b0ab38",
+    "username": "jerome",
+    "email": "jerome@gmail.com",
+    "password": "$2b$10$EP/yGPGmlHM/ueqv9xjIiO9w12g8rR2tl2KQdnxj.aYEgH.5IELIq"
   }
 }
